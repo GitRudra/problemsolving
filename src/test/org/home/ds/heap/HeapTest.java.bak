@@ -1,0 +1,38 @@
+package org.home.ds.heap;
+
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import java.util.Comparator;
+
+public class HeapTest {
+
+    @BeforeMethod
+    public void setUp() {
+    }
+
+    @AfterMethod
+    public void tearDown() {
+    }
+
+    @Test
+    public void testAddElement() {
+        Heap<Integer> hp = new Heap(Integer.class, 5, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2.compareTo(o1);
+            }
+        });
+        int[] elements = {2,3,4,5,6,7,8,9,10,1};
+        for(int x:elements){
+            hp.addElement(x);
+        }
+        System.out.println(hp.getTop());
+
+    }
+
+    @Test
+    public void testGetMin() {
+    }
+}

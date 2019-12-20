@@ -1,0 +1,100 @@
+package org.home.cmp.ms.problems;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class LeaderBoardProblem {
+
+    public int[] climbingLeaderboard(int[] scores, int[] alice) {
+        int[] res = new int[alice.length];
+        List<LeaderBoardEntry> boards = createLeaderBoard(scores);
+        LeaderBoardEntry search = new LeaderBoardEntry(-1,0);
+        for(int i=0;i<alice.length;i++){
+            search.setScore(alice[i]);
+            res[i] = rearrangeLeaderBoard(boards,search);
+            search.setRank(res[i]);
+        }
+        return res;
+    }
+
+    public int rearrangeLeaderBoard(List<LeaderBoardEntry> boards, LeaderBoardEntry search){
+        int rank=0;
+        Boolean foundPos = false;
+        for(int i=boards.size()-1;i>=0;i--){
+            if(search.getScore()<boards.get(i).getScore()){
+               rank = boards.get(i).getRank()+1;
+                foundPos = true;
+               break;
+            }else if(search.getScore()==boards.get(i).getScore()){
+                rank = boards.get(i).getRank();
+                foundPos = true;
+                break;
+            }
+        }
+
+        if(!foundPos){
+            rank = 1;
+        }
+        return rank;
+    }
+
+    public List<LeaderBoardEntry> createLeaderBoard(int[] scores){
+        List<LeaderBoardEntry> boards = new ArrayList<>();
+        int rank = 1;
+        int currentScore = scores[0];
+        for(int i=0;i<scores.length;i++){
+            if(scores[i]==currentScore){
+                boards.add(new LeaderBoardEntry(rank,scores[i]));
+            }else{
+                rank+=1;
+                currentScore = scores[i];
+                boards.add(new LeaderBoardEntry(rank,scores[i]));
+            }
+        }
+        return boards;
+
+    }
+
+    class LeaderBoardEntry{
+        int rank;
+        int score;
+
+        public LeaderBoardEntry(int rank, int score) {
+            this.rank = rank;
+            this.score = score;
+        }
+
+        public int getRank() {
+            return rank;
+        }
+
+        public void setRank(int rank) {
+            this.rank = rank;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
+
+        @Override
+        public String toString() {
+            return "LeaderBoardEntry{" +
+                    "rank=" + rank +
+                    ", score=" + score +
+                    '}';
+        }
+
+
+    }
+
+
+
+
+
+}

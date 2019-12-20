@@ -1,0 +1,98 @@
+package org.home.ds.heap;
+
+import java.lang.reflect.Array;
+import java.util.Comparator;
+
+public class Heap<T> {
+    private final int heapSize;
+    private final T[] elements;
+    private int currentHeapSize;
+
+    private Comparator<T> comparator;
+
+    public Heap(Class<T> type, int heapSize, Comparator comparator) {
+        this.heapSize = heapSize;
+        elements = (T[]) Array.newInstance(type, heapSize);
+        currentHeapSize = 0;
+        this.comparator = comparator;
+    }
+
+    public int size(){
+        return currentHeapSize;
+    }
+
+    private int getParent(int i) {
+        return i / 2;
+    }
+
+    private int getLeft(int i) {
+        return 2 * i + 1;
+    }
+
+    private int getRight(int i) {
+        return 2 * (i + 1);
+    }
+
+    private void swap(int source, int destination) {
+        T temp = elements[source];
+        elements[source] = elements[destination];
+        elements[destination] = temp;
+    }
+
+    private void heapify(int index, int dataLength) {
+        int small;
+        int left = getLeft(index);
+        int right = getRight(index);
+        if (left <= dataLength && comparator.compare(elements[left], elements[index]) < 0) {
+            small = left;
+        } else {
+            small = index;
+        }
+
+        if (right <= dataLength && comparator.compare(elements[right], elements[small]) < 0) {
+            small = right;
+        }
+        if (small != index) {
+            swap(index, small);
+            heapify(small, dataLength);
+        }
+    }
+
+    public void addElement(T elm) {
+        if (currentHeapSize < heapSize) {
+            elements[currentHeapSize] = elm;
+            doHeapify(currentHeapSize / 2, currentHeapSize);
+            currentHeapSize++;
+        } else {
+            if (comparator.compare(elm, elements[0]) > 0) {
+                elements[0] = elm;
+                doHeapify(currentHeapSize / 2, currentHeapSize - 1);
+            }
+        }
+    }
+
+    private void doHeapify(int startIndex, int datalength) {
+        for (int i = startIndex; i >= 0; i--) {
+            heapify(i, datalength);
+        }
+    }
+
+    public void printHeap() {
+        System.out.println("--------------------------");
+        for (int i = 0; i < currentHeapSize; i++) {
+            System.out.print(elements[i].toString() + "  ");
+        }
+    }
+
+    public T getTop() {
+        return elements[0];
+    }
+
+    /*public T removeTop(){
+     *//* T top = elements[0];
+        elements[0] = elements[currentHeapSize];
+        he
+        return top;*//*
+
+    }*/
+}
